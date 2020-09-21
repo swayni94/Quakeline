@@ -1,5 +1,6 @@
 package com.example.quakeline.Service;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.IntentService;
 import android.app.Notification;
@@ -30,7 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +50,7 @@ public class QuakelineService extends IntentService {
         super("QuakelineService");
     }
 
-    private static final String TAG = "BOOMBOOMTESTGPS";
+    private static final String TAG = "QUAKELINETESTGPS";
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
@@ -146,22 +149,20 @@ public class QuakelineService extends IntentService {
             }
         }
     }
-    @Override
-    protected void onHandleIntent(Intent intent) {
-
-    }
 
     private void setRequest()
     {
-        Location location = mLocationListeners[2].getmLocation();
-
         String baseURL = "https://api.orhanaydogdu.com.tr";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
         IRestServise servise = retrofit.create(IRestServise.class);
+
         servise.getQuakes().enqueue(new Callback<QuakeResponseModel>() {
             @Override
             public void onResponse(Call<QuakeResponseModel> call, Response<QuakeResponseModel> response) {
                 if (response.isSuccessful()){
+                    Location location = mLocationListeners[2].getmLocation();
+                    Log.e(TAG, " "+location.getLatitude()+ " - " + location.getLongitude());
+                    //notificationQuakeline("2- "+location.getLatitude()+ " - " + location.getLongitude());//Deneme!!
                     List<Result> results = Objects.requireNonNull(response.body()).getResult();
                     List<Result> nearQuakes = new ArrayList<>();
                     for (int i=0; i<results.size();i++){
@@ -172,15 +173,16 @@ public class QuakelineService extends IntentService {
                             nearQuakes.add(results.get(i));
                             String term = " "+results.get(i).getTitle() + " - " + results.get(i).getDate() + " - " + results.get(i).getMag();
                             notificationQuakeline(term);
+ //Düzenlenecek!!                           //
                         }
                     }
-                    Toast.makeText(getApplication(), "bbbbbb", Toast.LENGTH_SHORT);
                 }
             }
 
+            @SuppressLint("ShowToast")
             @Override
             public void onFailure(Call<QuakeResponseModel> call, Throwable t) {
-                Toast.makeText(getApplication(), "aaaaaa", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplication(),"error", Toast.LENGTH_LONG);
             }
         });
     }
@@ -198,20 +200,12 @@ public class QuakelineService extends IntentService {
         endPoint.setLongitude(quakelon);
 
         double distance=startPoint.distanceTo(endPoint);
-
-        return distance / kmSabiti < km;
+//Düzenlenecek!!
+        distance = distance / kmSabiti;
+        return distance< km;
     }
 
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("QuekelineBackgroundService","Quekeline Service Running!");
-        setRequest();
-
-        return START_STICKY;
-    }
-
-    public void notificationQuakeline(String quakelineDetail)
+    public void notificationQuakeline(String quakelineNotificationDetail)
     {
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -219,12 +213,13 @@ public class QuakelineService extends IntentService {
                 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Quekeline Service")
-                .setContentText(quakelineDetail)
+                .setContentText(quakelineNotificationDetail)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build();
 
-        startForeground(1, notification);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(1, notification);
     }
 
     public static final String CHANNEL_ID = "QuekelineServiceChannel";
@@ -237,7 +232,33 @@ public class QuakelineService extends IntentService {
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
+            Objects.requireNonNull(manager).createNotificationChannel(serviceChannel);
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("QuekelineBackgroundService","Quekeline Service Running!");
+        setRequest();
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        Log.e(TAG, "create");
+        getUserLocation();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e(TAG,"destroy");
+        super.onDestroy();
+        locationRemoveUpdetes();
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+
     }
 }

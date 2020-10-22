@@ -1,6 +1,12 @@
 package com.example.quakeline.RestApi;
 
+import android.util.Log;
+
 import com.example.quakeline.RestApi.Model.QuakeResponseModel;
+import com.example.quakeline.RestApi.Model.Result;
+
+import java.util.List;
+import java.util.Objects;
 
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
@@ -22,19 +28,19 @@ public class Repository {
 
     private IRestServise servise;
 
-    public Repository(){
+    private Repository(){
         servise = RestServise.getClient().create(IRestServise.class);
     }
 
-    public MutableLiveData<QuakeResponseModel> getQuakeRequest(){
-        final MutableLiveData<QuakeResponseModel> responseModelMutableLiveData = new MutableLiveData<>();
-
+    public MutableLiveData<List<Result>> getQuakeRequest(){
+        final MutableLiveData<List<Result>> responseModelMutableLiveData = new MutableLiveData<>();
         servise.getQuakes().enqueue(new Callback<QuakeResponseModel>() {
             @Override
             public void onResponse(Call<QuakeResponseModel> call, Response<QuakeResponseModel> response) {
                 if (response.isSuccessful())
                 {
-                    responseModelMutableLiveData.postValue(response.body());
+                    responseModelMutableLiveData.postValue(response.body().getResult());
+                    Log.e("RepositoryIsSuccessfull", "Repository Is Successfull!!");
                 }
                 else {
                     responseModelMutableLiveData.setValue(null);
@@ -44,6 +50,7 @@ public class Repository {
             @Override
             public void onFailure(Call<QuakeResponseModel> call, Throwable t) {
                 responseModelMutableLiveData.setValue(null);
+                Log.e("RepositoryError", "Repository Error!!");
             }
         });
         return responseModelMutableLiveData;

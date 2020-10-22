@@ -1,23 +1,17 @@
 package com.example.quakeline.Service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.content.Context;
-import android.content.IntentFilter;
+import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,6 +24,7 @@ import com.example.quakeline.ViewPage.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -39,8 +34,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.content.ContentValues.TAG;
 
 public class QuakelineService extends IntentService {
 
@@ -148,6 +141,7 @@ public class QuakelineService extends IntentService {
                 }
             }
         }
+
     }
 
     private void setRequest()
@@ -162,27 +156,25 @@ public class QuakelineService extends IntentService {
                 if (response.isSuccessful()){
                     Location location = mLocationListeners[2].getmLocation();
                     Log.e(TAG, " "+location.getLatitude()+ " - " + location.getLongitude());
-                    //notificationQuakeline("2- "+location.getLatitude()+ " - " + location.getLongitude());//Deneme!!
                     List<Result> results = Objects.requireNonNull(response.body()).getResult();
                     List<Result> nearQuakes = new ArrayList<>();
                     for (int i=0; i<results.size();i++){
                         double x= results.get(i).getLat();
                         double y= results.get(i).getLng();
+                        notificationQuakeline("deneme");
                         if (currentLocation(location.getLatitude(),location.getLongitude(), x,y))
                         {
                             nearQuakes.add(results.get(i));
                             String term = " "+results.get(i).getTitle() + " - " + results.get(i).getDate() + " - " + results.get(i).getMag();
                             notificationQuakeline(term);
- //Düzenlenecek!!                           //
                         }
                     }
                 }
             }
 
-            @SuppressLint("ShowToast")
             @Override
             public void onFailure(Call<QuakeResponseModel> call, Throwable t) {
-                Toast.makeText(getApplication(),"error", Toast.LENGTH_LONG);
+                Log.e("Network Error", "Database Error or Network Error");
             }
         });
     }
@@ -200,7 +192,7 @@ public class QuakelineService extends IntentService {
         endPoint.setLongitude(quakelon);
 
         double distance=startPoint.distanceTo(endPoint);
-//Düzenlenecek!!
+
         distance = distance / kmSabiti;
         return distance< km;
     }
@@ -218,8 +210,11 @@ public class QuakelineService extends IntentService {
                 .setContentIntent(pendingIntent)
                 .build();
 
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(1, notification);
+        int i = new Random().nextInt(9999-1000);
+        managerCompat.notify(i, notification);
     }
 
     public static final String CHANNEL_ID = "QuekelineServiceChannel";

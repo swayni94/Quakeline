@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_weight="1"
+    android:layout_marginEnd="5dp"
+    cardview:cardUseCompatPadding="true">
+
+    <LinearLayout
+
+        android:id="@+id/quakeItem_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:background="@drawable/eliptical_lineerlayout"
+        android:backgroundTint="@color/backgroundColor_lowPriority"
+        android:backgroundTintMode="add">
+
+
+        <TextView
+            android:id="@+id/quakeItem_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dsamdlm GYUGUVG IIBHBHBUHKLB"
+            android:textStyle="bold|italic|normal"
+            android:textColor="@color/textColor"
+            android:textSize="15sp"
+             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:padding="8dp"
+            >
+            <TextView
+                 android:id="@+id/quakeItem_Date"
+                 android:textSize="15sp"
+                 android:text="12.32.1221"
+                android:textStyle="bold|italic|normal"
+                android:textColor="@color/textColor"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginEnd="80dp"
+                 />
+
+
+            <TextView
+                android:id="@+id/quakeItem_currentLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45 km"
+                android:textSize="15sp"
+                android:textStyle="bold|italic|normal"
+                android:textColor="@color/textColor"
+                android:layout_marginEnd="80dp"
+                />
+
+            <TextView
+                android:id="@+id/quakeItem_Mag"
+                android:text="3.4"
+                android:textSize="15sp"
+                android:textColor="@color/textColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold|italic|normal"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

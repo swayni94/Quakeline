@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Quakeline</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="hello_main_fragment">
+        Hello Dear User!
+    </string>
 </resources>

@@ -5,6 +5,9 @@ import android.util.Log;
 import com.example.quakeline.RestApi.Model.QuakeResponseModel;
 import com.example.quakeline.RestApi.Model.Result;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +29,7 @@ public class Repository {
         return repository;
     }
 
-    private IRestServise servise;
+    private final IRestServise servise;
 
     private Repository(){
         servise = RestServise.getClient().create(IRestServise.class);
@@ -36,11 +39,11 @@ public class Repository {
         final MutableLiveData<List<Result>> responseModelMutableLiveData = new MutableLiveData<>();
         servise.getQuakes().enqueue(new Callback<QuakeResponseModel>() {
             @Override
-            public void onResponse(Call<QuakeResponseModel> call, Response<QuakeResponseModel> response) {
+            public void onResponse(@NotNull Call<QuakeResponseModel> call, @NotNull Response<QuakeResponseModel> response) {
                 if (response.isSuccessful())
                 {
-                    responseModelMutableLiveData.postValue(response.body().getResult());
-                    Log.e("RepositoryIsSuccessfull", "Repository Is Successfull!!");
+                    responseModelMutableLiveData.postValue(Objects.requireNonNull(response.body()).getResult());
+                    Log.e("RepositoryForViewModel", "Repository Is Successful!!");
                 }
                 else {
                     responseModelMutableLiveData.setValue(null);
@@ -48,7 +51,7 @@ public class Repository {
             }
 
             @Override
-            public void onFailure(Call<QuakeResponseModel> call, Throwable t) {
+            public void onFailure(@NotNull Call<QuakeResponseModel> call, @NotNull Throwable t) {
                 responseModelMutableLiveData.setValue(null);
                 Log.e("RepositoryError", "Repository Error!!");
             }
@@ -56,5 +59,23 @@ public class Repository {
         return responseModelMutableLiveData;
     }
 
+
+    public ArrayList<Result> getQuakeRequestBackground(){
+        ArrayList<Result> results= new ArrayList<>();
+        servise.getQuakes().enqueue(new Callback<QuakeResponseModel>() {
+            @Override
+            public void onResponse(@NotNull Call<QuakeResponseModel> call , @NotNull Response<QuakeResponseModel> response) {
+                if (response.isSuccessful()){
+                    Log.e("RepositoryForBackground", "Repository Is Successful!!");
+                    results.addAll(Objects.requireNonNull(response.body()).getResult());
+                }
+            }
+            @Override
+            public void onFailure(@NotNull Call<QuakeResponseModel> call , @NotNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        return results;
+    }
 
 }

@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="AppThemes.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppThemes.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppThemes.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

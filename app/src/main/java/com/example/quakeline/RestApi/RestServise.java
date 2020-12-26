@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestServise {
 
-    private static String baseURL = "https://api.orhanaydogdu.com.tr";
+    private static final String baseURL = "https://api.orhanaydogdu.com.tr";
     private static Retrofit retrofit;
 
 

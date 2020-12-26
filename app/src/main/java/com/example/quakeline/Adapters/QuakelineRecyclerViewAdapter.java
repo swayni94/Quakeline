@@ -2,30 +2,29 @@ package com.example.quakeline.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.quakeline.Helpers.CurrentLocationHelper;
 import com.example.quakeline.R;
 import com.example.quakeline.RestApi.Model.Result;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Activity context;
-    private List<Result> datas;
-    private CurrentLocationHelper helper;
-    private double userlat, userlon;
-    private int midKM=50, highKM=25;
+    private final Activity context;
+    private final List<Result> datas;
+    private final CurrentLocationHelper helper;
+    private final double userlat;
+    private final double userlon;
 
     public QuakelineRecyclerViewAdapter(List<Result> _datas, Activity _context, double _userlat, double _userlon){
         context = _context;
@@ -42,7 +41,7 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         return new QuakelineRecyclerViewViewHolder(view);
     }
 
-    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+    @SuppressLint({"SetTextI18n" , "ResourceAsColor" , "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Result quake = datas.get(position);
@@ -50,25 +49,17 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         double term = helper.currentLocationKm(userlat, userlon, quake.getLat(), quake.getLng());
 
-        /*if (helper.currentLocation(userlat, userlon, quake.getLat(), quake.getLng(), 25)){
-            viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_highPriority));
-        }
-        else if (helper.currentLocation(userlat, userlon, quake.getLat(), quake.getLng(), 50)){
-            viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_middlePriority));
-        }
-        else {
-            viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_lowPriority));
-        }
-        */
-         if (term<=highKM){
-             viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_highPriority));
-         }else if (term<=midKM){
-             viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_middlePriority));
+        double midKM = 50;
+        double highKM = 25;
+        if (term <= highKM){
+            viewHolder.background.setBackground(ContextCompat.getDrawable(context, R.color.backgroundColor_highPriority));
+         }else if (term <= midKM){
+            viewHolder.background.setBackground(ContextCompat.getDrawable(context, R.color.backgroundColor_middlePriority));
          }else {
-             viewHolder.background.setBackgroundTintList(ColorStateList.valueOf(R.color.backgroundColor_lowPriority));
+            viewHolder.background.setBackground(ContextCompat.getDrawable(context, R.color.backgroundColor_lowPriority));
          }
         viewHolder.title.setText(quake.getTitle());
-        viewHolder.currentLocation.setText(" "+term);
+        viewHolder.currentLocation.setText(String.format("%.2f",term)+" km");
         viewHolder.mag.setText(quake.getMag().toString());
         viewHolder.date.setText(quake.getDate());
     }
@@ -78,12 +69,12 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         return datas.size();
     }
 
-    class QuakelineRecyclerViewViewHolder extends RecyclerView.ViewHolder{
+    static class QuakelineRecyclerViewViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView mag;
         TextView date;
         TextView currentLocation;
-        LinearLayout background;
+        ConstraintLayout background;
         private QuakelineRecyclerViewViewHolder(@NonNull View itemView) {
             super(itemView);
             title= itemView.findViewById(R.id.quakeItem_Title);

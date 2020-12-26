@@ -2,23 +2,19 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_weight="1"
-    android:layout_marginEnd="5dp"
-    cardview:cardUseCompatPadding="true">
+    android:layout_marginBottom="5dp"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardUseCompatPadding="true">
 
-    <LinearLayout
-
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/quakeItem_background"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_weight="1"
         android:padding="8dp"
-        android:background="@drawable/eliptical_lineerlayout"
-        android:backgroundTint="@color/backgroundColor_lowPriority"
-        android:backgroundTintMode="add">
-
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/quakeItem_Title"
@@ -28,49 +24,49 @@
             android:textStyle="bold|italic|normal"
             android:textColor="@color/textColor"
             android:textSize="15sp"
-             />
+            android:layout_margin="6dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/quakeItem_Date"
+            android:textSize="15sp"
+            android:text="12.32.1221 13:12:49"
+            android:textStyle="bold|italic|normal"
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_margin="6dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="bottom"
-            android:padding="8dp"
-            >
-            <TextView
-                 android:id="@+id/quakeItem_Date"
-                 android:textSize="15sp"
-                 android:text="12.32.1221"
-                android:textStyle="bold|italic|normal"
-                android:textColor="@color/textColor"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginEnd="80dp"
-                 />
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/quakeItem_Title" />
 
+        <TextView
+            android:id="@+id/quakeItem_currentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45 km"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_margin="6dp"
+            android:textStyle="bold|italic|normal"
+            android:textColor="@color/textColor"
+            card_view:layout_constraintStart_toEndOf="@id/quakeItem_Date"
+            card_view:layout_constraintEnd_toStartOf="@id/quakeItem_Mag"
+            card_view:layout_constraintTop_toBottomOf="@id/quakeItem_Title" />
 
-            <TextView
-                android:id="@+id/quakeItem_currentLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="45 km"
-                android:textSize="15sp"
-                android:textStyle="bold|italic|normal"
-                android:textColor="@color/textColor"
-                android:layout_marginEnd="80dp"
-                />
+        <TextView
+            android:id="@+id/quakeItem_Mag"
+            android:text="3.4"
+            android:textSize="15sp"
+            android:layout_margin="6dp"
+            android:textColor="@color/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|italic|normal"
+            card_view:layout_constraintTop_toBottomOf="@id/quakeItem_Title"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            />
 
-            <TextView
-                android:id="@+id/quakeItem_Mag"
-                android:text="3.4"
-                android:textSize="15sp"
-                android:textColor="@color/textColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textStyle="bold|italic|normal"
-                />
-        </LinearLayout>
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

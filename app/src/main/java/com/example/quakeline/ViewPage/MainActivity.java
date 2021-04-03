@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{mPermission}, REQUEST_CODE_PERMISSION);
         }
 
-
         mainViewModel = new  ViewModelProvider(this).get(MainViewModel.class);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(quakelinesBroadcastReceiver , intentFilter);
 */
         scheduleAlarm();
-
     }
 
     private void scheduleAlarm()

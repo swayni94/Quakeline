@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.quakeline.Helpers.CurrentLocationHelper;
+import com.example.common.RestApi.Model.Result;
+import com.example.common.helper.CurrentLocationHelper;
 import com.example.quakeline.R;
-import com.example.quakeline.RestApi.Model.Result;
 
 import java.util.List;
 
@@ -22,7 +22,6 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     private final Activity context;
     private final List<Result> datas;
-    private final CurrentLocationHelper helper;
     private final double userlat;
     private final double userlon;
 
@@ -31,7 +30,6 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         datas = _datas;
         userlat = _userlat;
         userlon = _userlon;
-        helper = new CurrentLocationHelper();
     }
 
     @NonNull
@@ -47,7 +45,7 @@ public class QuakelineRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         Result quake = datas.get(position);
         QuakelineRecyclerViewViewHolder viewHolder=(QuakelineRecyclerViewViewHolder) holder;
 
-        double term = helper.currentLocationKm(userlat, userlon, quake.getLat(), quake.getLng());
+        double term = CurrentLocationHelper.currentLocation(userlat, userlon, quake.getLat(), quake.getLng());
 
         double midKM = 50;
         double highKM = 25;

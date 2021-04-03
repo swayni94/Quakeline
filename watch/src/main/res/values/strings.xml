@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Quakeline</string>
+    <string name="intro_text">Swipe edge to exit the map.</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>

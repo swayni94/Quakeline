@@ -3,15 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.quakeline">
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- __________________________________________________________________________________________ -->
 
@@ -23,6 +18,10 @@
         android:xlargeScreens="true"
         tools:ignore="ManifestOrder" />
 
+    <uses-feature android:name="android.app.AlarmManager" />
+
+    <!-- __________________________________________________________________________________________ -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,10 +31,41 @@
         android:theme="@style/AppThemes"
         tools:ignore="AllowBackup">
 
+        <!-- __________________________________________________________________________________________ -->
+        <receiver android:name=".Widget.QuakelineWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quakeline_widget_info" />
+        </receiver>
+
+        <activity android:name=".Widget.QuakelineWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- __________________________________________________________________________________________ -->
+
+        <activity
+            android:name=".ViewPage.SplashActivity"
+            android:theme="@style/AppThemes.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- __________________________________________________________________________________________ -->
+
         <service
             android:name=".Service.QuakelineMainService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,7 +79,8 @@
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!-- __________________________________________________________________________________________ -->
+            android:value="@integer/google_play_services_version" />
+        <!-- __________________________________________________________________________________________ -->
         <receiver
             android:name=".Receivers.QuakelinesBroadcastReceiver"
             android:process=":remote"
@@ -61,16 +92,10 @@
         <receiver
             android:name=".Receivers.ServiceBroadcastReceiver"
             android:process=":remote" /> <!-- suppress CheckTagEmptyBody -->
-       <!-- __________________________________________________________________________________________ -->
+        <!-- __________________________________________________________________________________________ -->
         <activity
             android:name=".ViewPage.MainActivity"
-            android:theme="@style/AppThemes.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppThemes.NoActionBar" />
     </application>
 
 </manifest>

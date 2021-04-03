@@ -35,7 +35,7 @@ public class QuakeListFragment extends Fragment {
     public void onViewCreated(@NonNull View view , @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view , savedInstanceState);
         if (savedInstanceState != null) {
-            savedInstanceState.getDouble("loccation");
+            savedInstanceState.getDouble("location");
         }
         recyclerView = view.findViewById(R.id.quakeRecyclerview);
         quakeListViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);

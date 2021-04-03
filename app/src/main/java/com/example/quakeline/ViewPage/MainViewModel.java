@@ -4,9 +4,9 @@ import android.app.Application;
 import android.location.Location;
 import android.util.Log;
 
-import com.example.quakeline.Helpers.MainLocationListener;
-import com.example.quakeline.RestApi.Model.Result;
-import com.example.quakeline.RestApi.Repository;
+import com.example.common.RestApi.Model.Result;
+import com.example.common.RestApi.Repository;
+import com.example.common.helper.UserLocationListener;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-public class MainViewModel extends AndroidViewModel implements MainLocationListener.IUserLocationListener {
+public class MainViewModel extends AndroidViewModel implements UserLocationListener.IUserLocationListener {
 
     private MutableLiveData<List<Result>> quakeResponseModelMutableLiveData;
     private final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<Location>();
@@ -30,11 +30,11 @@ public class MainViewModel extends AndroidViewModel implements MainLocationListe
         {
             return;
         }
-        MainLocationListener locationListener = MainLocationListener.getInstance();
+        UserLocationListener locationListener = UserLocationListener.getInstance();
         Repository repository = Repository.getInstance();
         Log.e("onMainViewModel", "MainViewModel is running");
         quakeResponseModelMutableLiveData = repository.getQuakeRequest();
-        locationListener.startListiningUserLocation(getApplication().getApplicationContext(), this);
+        locationListener.startListeningUserLocation(getApplication().getApplicationContext(), this);
     }
 
     public LiveData<List<Result>> getNewQuakes(){
